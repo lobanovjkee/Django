@@ -1,22 +1,12 @@
 <div class="header clearfix">
     <a href="/" class="logo"></a>
     <ul class="menu">
-        {#        <li><a href="/">домой</a></li>#}
-        {#        <li><a href="/products/">продукты</a></li>#}
-        {#        <li><a href="/contact/" class="active">контакты</a></li>#}
-        {% if title == 'магазин' %}
-            <li><a href="{% url 'index' %}" class="active">домой</a></li>
-            <li><a href="{% url 'mainapp:index' %}">продукты</a></li>
-            <li><a href="{% url 'contacts' %}">контакты</a></li>
-        {% elif title == 'контакты' %}
-            <li><a href="{% url 'index' %}">домой</a></li>
-            <li><a href="{% url 'mainapp:index' %}">продукты</a></li>
-            <li><a href="{% url 'contacts' %}" class="active">контакты</a></li>
-        {% elif title == 'каталог' %}
-            <li><a href="{% url 'index' %}">домой</a></li>
-            <li><a href="{% url 'mainapp:index' %}" class="active">продукты</a></li>
-            <li><a href="{% url 'contacts' %}">контакты</a></li>
-        {% endif %}
+        <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %} active {% endif %}">домой</a>
+        </li>
+        <li><a href="{% url 'mainapp:products' %}"
+               class="{% if request.resolver_match.url_name == 'products' %} active {% endif %}">продукты</a></li>
+        <li><a href="{% url 'contacts' %}"
+               class="{% if request.resolver_match.url_name == 'contacts' %} active {% endif %}">контакты</a></li>
     </ul>
     <a href="#" class="search"></a>
     <a href="#" class="basket"></a>
