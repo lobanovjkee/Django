@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block header %}
+    <div class="hero-white">
+        {% include 'inc_header-menu.html' %}
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="test" style="margin-top: 20px">
+        <h4>{{ product.name }}</h4>
+        <img src="/media/{{ product.image }}" style="width: 300px" alt="">
+        <p>{{ product.description }}</p>
+    </div>
+
+{% endblock %}
+{% block js %}
+    {#    console.log('{{ product }}');#}
+{% endblock %}
