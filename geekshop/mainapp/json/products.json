@@ -1,0 +1,42 @@
+[
+  {
+    "pk": 1,
+    "category": "Дом",
+    "name": "Стул для дома",
+    "image": "products_images/01505488e1ead20028c02d918e12--dlya-doma-i-interera-stulya-stul-kreslo-po_EOq0hwj.jpg",
+    "short_desc": "Домашний удобный стул",
+    "description": "Можно сидеть на нём",
+    "price": "1529.10",
+    "quantity": 21
+  },
+  {
+    "pk": 2,
+    "category": "Офис",
+    "name": "Офисный стул",
+    "image": "products_images/kreslo_operatora_ch_797axsn_s_polkotnikami_kombinirovannoe_cherno_sinee__Gvvsm7V.jpg",
+    "short_desc": "Стул для офиса",
+    "description": "Комфортный для работы",
+    "price": "2000.00",
+    "quantity": 10
+  },
+  {
+    "pk": 3,
+    "category": "Модерн",
+    "name": "Стул в стиле модерн",
+    "image": "products_images/101577-e99c627011eba84e608fee36373b0b8a_RrKe1fp.jpg",
+    "short_desc": "Стильный стул",
+    "description": "Отличное и функциональное украшение любого помещения",
+    "price": "2647.24",
+    "quantity": 0
+  },
+  {
+    "pk": 4,
+    "category": "Классика",
+    "name": "Классический стул",
+    "image": "products_images/844276202_stul-s-myagkim_aY3Fp9C.webp",
+    "short_desc": "Обычный стул",
+    "description": "Вы все когда-то сидели на таком",
+    "price": "1254.00",
+    "quantity": 54
+  }
+]
