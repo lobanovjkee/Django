@@ -8,6 +8,7 @@ def main(request):
         "title": 'магазин',
         'topic': 'тренды',
         'products': products,
+
     }
     return render(request, 'index.html', context=context)
 

@@ -1,28 +1,34 @@
-from django.shortcuts import render
-from .models import Product
+from django.shortcuts import render, get_object_or_404
+from .models import Product, ProductCategory
 
 
-def products(request):
-    context = {
-        'title': 'каталог',
-        'links': [
-            {'href': 'mainapp:products', 'name': 'все'},
-            {'href': 'mainapp:products', 'name': 'дом'},
-            {'href': 'mainapp:products', 'name': 'офис'},
-            {'href': 'mainapp:products', 'name': 'модерн'},
-            {'href': 'mainapp:products', 'name': 'классика'}
-        ]}
+def products(request, pk=None):
+    categories = ProductCategory.objects.all()
 
-    return render(request, 'products.html', context=context)
+    if pk is not None:
+        if pk == 0:
+            products = Product.objects.all().order_by('price')
+            category = {'name': 'все'}
+        else:
+            category = get_object_or_404(ProductCategory, pk=pk)
+            products = Product.objects.filter(category__pk=pk).order_by('price')
+
+        content = {
+            'title': 'каталог',
+            'categories': categories,
+            'category': category,
+            'products': products,
+        }
+
+        return render(request, 'products_list.html', content)
 
 
 def product_page(request, pk=None):
     try:
         product = Product.objects.all()[pk - 1]
-
         context = {
+            'title': product.name,
             'product': product,
-
         }
         return render(request, 'product_page.html', context=context)
     except IndexError:

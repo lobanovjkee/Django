@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mainapp',
-    'authapp'
+    'authapp',
+    'basketapp',
 ]
 
 AUTH_USER_MODEL = 'authapp.ShopUser'
@@ -79,7 +80,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-        'CHARSET': 'utf8mb4',
+        'CHARSET': 'utf-8',
     }
 }
 

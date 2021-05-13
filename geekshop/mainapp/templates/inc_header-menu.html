@@ -3,7 +3,7 @@
     <ul class="menu">
         <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %} active {% endif %}">домой</a>
         </li>
-        <li><a href="{% url 'mainapp:products' %}"
+        <li><a href="{% url 'mainapp:category' 0 %}"
                class="{% if request.resolver_match.url_name == 'products' %} active {% endif %}">продукты</a></li>
         <li><a href="{% url 'contacts' %}"
                class="{% if request.resolver_match.url_name == 'contacts' %} active {% endif %}">контакты</a></li>
@@ -22,6 +22,6 @@
             {% endif %}
         </li>
     </ul>
-    <a href="#" class="search"></a>
-    <a href="#" class="basket"></a>
+    <a href="#" class="fa fa-search"></a>
+    <a href="{% url 'basket:list' %}" class="fa fa-shopping-basket"></a><span> {{ total_quantity }}</span>
 </div>
