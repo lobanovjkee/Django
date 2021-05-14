@@ -8,7 +8,8 @@ from mainapp.models import Product
 def basket(request):
     if request.user.is_authenticated:
         basket = Basket.objects.filter(user=request.user)
-        total_quantity = sum(item.quantity for item in basket)
+        # total_quantity = sum(item.quantity for item in basket)
+        total_quantity = get_quantity()
         context = {
             'basket': basket,
             'total_quantity': total_quantity,
@@ -38,11 +39,9 @@ def basket_remove(request, pk=None):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-# def get_quantity():
-#     basket = Basket.objects.all()
-#     total_quantity = 0
-#
-#     for i in basket:
-#         total_quantity += basket[i].quantity
-#
-#     return total_quantity
+
+def get_quantity():
+    basket = Basket.objects.all()
+    total_quantity = sum(item.quantity for item in basket)
+
+    return total_quantity

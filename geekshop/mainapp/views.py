@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+
+import basketapp.views
 from .models import Product, ProductCategory
 
 
@@ -18,6 +20,7 @@ def products(request, pk=None):
             'categories': categories,
             'category': category,
             'products': products,
+            'total_quantity': basketapp.views.get_quantity(),
         }
 
         return render(request, 'products_list.html', content)
@@ -29,6 +32,7 @@ def product_page(request, pk=None):
         context = {
             'title': product.name,
             'product': product,
+            'total_quantity': basketapp.views.get_quantity(),
         }
         return render(request, 'product_page.html', context=context)
     except IndexError:
