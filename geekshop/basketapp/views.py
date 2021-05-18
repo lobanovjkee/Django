@@ -8,11 +8,9 @@ from mainapp.models import Product
 def basket(request):
     if request.user.is_authenticated:
         basket = Basket.objects.filter(user=request.user)
-        # total_quantity = sum(item.quantity for item in basket)
-        total_quantity = get_quantity()
         context = {
             'basket': basket,
-            'total_quantity': total_quantity,
+            'total_quantity': get_quantity(),
         }
         return render(request, 'basket.html', context)
 
