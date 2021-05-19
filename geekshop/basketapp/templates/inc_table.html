@@ -1,0 +1,30 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Продукт</th>
+        <th scope="col">Количество</th>
+        <th scope="col">Удалить</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    {% for item in basket %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td class="hover_img">{{ item.product.name }} <span><img src="/media/{{ item.product.image }}"></span></td>
+            <td><input class="p-2 w-25" type="number" name="{{ item.pk }}" min="0"
+                       value="{{ item.quantity }}"></td>
+            <th><a style="text-decoration: none; color: black;"
+                   href="{% url 'basket:remove' item.pk %}">&Chi;</a></th>
+        </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% if basket %}
+    <div class="basket_summary">
+        В корзине <b>{{ basket.0.total_quantity }}</b> товаров общей стоимостью
+        <b>{{ basket.0.total_cost }}</b> руб
+    </div>
+{% endif %}

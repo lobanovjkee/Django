@@ -23,5 +23,9 @@
         </li>
     </ul>
     <a href="#" class="fa fa-search"></a>
-    <a href="{% url 'basket:list' %}" class="fa fa-shopping-basket"></a><span> {{ total_quantity }}</span>
+    <a href="{% url 'basket:list' %}" class="fa fa-shopping-basket"></a>
+        <span>
+            {{ basket.0.total_cost|floatformat:0 }} руб
+            ({{ basket.0.total_quantity }} шт.)
+        </span>
 </div>

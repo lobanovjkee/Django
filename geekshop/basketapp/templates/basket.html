@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block js %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{% static 'basketapp/js/basket_input.js' %}"></script>
 
+{% endblock %}
 {% block header %}
     {% include 'inc_header-menu.html' %}
 {% endblock %}
@@ -8,28 +12,14 @@
     {% if user.is_authenticated %}
         <div class="container">
             <div class="row">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Продукт</th>
-                        <th scope="col">Количество</th>
+                <div class="basket_list">
+{#                    {% include 'inc_basket-content.html' %}#}
+                                        {% include 'inc_table.html' %}
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for item in basket %}
-                        <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ item.product.name }} </td>
-                            <td>{{ item.quantity }}</td>
-                            <th><a href="{% url 'basket:remove' item.pk %}">&Chi;</a></th>
-                        </tr>
-                    {% endfor %}
+                </div>
 
-                    </tbody>
-                </table>
             </div>
         </div>
     {% endif %}
 {% endblock %}
+
