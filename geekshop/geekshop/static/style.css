@@ -1204,6 +1204,7 @@ td:first-child {
 
 .hover_img:hover span{
     visibility: visible;
+    transition: visibility .2s ease-in;
 }
 
 .hover_img img {
