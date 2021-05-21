@@ -1,23 +1,29 @@
 from django.shortcuts import render
 
-import basketapp.views
+from basketapp.models import Basket
 from mainapp.models import Product
 
 
 def main(request):
     products = Product.objects.all()[:4]
+    basket = ''
+    if request.user.is_authenticated:
+        basket = Basket.objects.filter(user=request.user)
     context = {
         "title": 'магазин',
         'topic': 'тренды',
         'products': products,
-        'total_quantity': basketapp.views.get_quantity(),
+        'basket': basket,
     }
     return render(request, 'index.html', context=context)
 
 
 def contacts(request):
+    basket = ''
+    if request.user.is_authenticated:
+        basket = Basket.objects.filter(user=request.user)
     context = {
         'title': 'контакты',
-        'total_quantity': basketapp.views.get_quantity(),
+        'basket': basket,
     }
     return render(request, 'contact.html', context=context)
