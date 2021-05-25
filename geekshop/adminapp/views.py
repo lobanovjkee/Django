@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from adminapp.forms import ShopUserAdminEditForm
+from adminapp.forms import ShopUserAdminEditForm, ProductCategoryForm, ProductForm
 from authapp.forms import ShopUserRegisterForm
 from authapp.models import ShopUser
 from django.shortcuts import get_object_or_404, render
@@ -23,6 +23,7 @@ def users(request):
     return render(request, 'users.html', context=context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def user_create(request):
     title = 'пользователи/создание'
 
@@ -34,11 +35,12 @@ def user_create(request):
     else:
         user_form = ShopUserRegisterForm()
 
-    content = {'title': title, 'update_form': user_form}
+    context = {'title': title, 'update_form': user_form}
 
-    return render(request, 'user_update.html', content)
+    return render(request, 'user_update.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def user_update(request, pk):
     title = 'пользователи/редактирование'
 
@@ -51,11 +53,12 @@ def user_update(request, pk):
     else:
         edit_form = ShopUserAdminEditForm(instance=edit_user)
 
-    content = {'title': title, 'update_form': edit_form}
+    context = {'title': title, 'update_form': edit_form}
 
-    return render(request, 'user_update.html', content)
+    return render(request, 'user_update.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def user_delete(request, pk):
     title = 'пользователи/удаление'
 
@@ -66,11 +69,12 @@ def user_delete(request, pk):
         user.save()
         return HttpResponseRedirect(reverse('admin_staff:users'))
 
-    content = {'title': title, 'user_to_delete': user}
+    context = {'title': title, 'user_to_delete': user}
 
-    return render(request, 'user_delete.html', content)
+    return render(request, 'user_delete.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def categories(request):
     title = 'админка/категории'
 
@@ -84,18 +88,61 @@ def categories(request):
     return render(request, 'categories.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def category_create(request):
-    pass
+    title = 'категории/создание'
+
+    if request.method == 'POST':
+        form = ProductCategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('admin_staff:categories'))
+    else:
+        form = ProductCategoryForm()
+
+    context = {
+        'title': title,
+        'form': form,
+    }
+
+    return render(request, 'categories_update.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def category_update(request, pk):
-    pass
+    title = 'категории/редактирование'
+
+    edit_category = get_object_or_404(ProductCategory, pk=pk)
+    if request.method == 'POST':
+        form = ProductCategoryForm(request.POST, request.FILES, instance=edit_category)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('admin_staff:category_update', args=[edit_category.pk]))
+    else:
+        form = ProductCategoryForm(instance=edit_category)
+
+    context = {'title': title, 'form': form}
+
+    return render(request, 'categories_update.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def category_delete(request, pk):
-    pass
+    title = 'категории/удаление'
+
+    category = get_object_or_404(ProductCategory, pk=pk)
+
+    if request.method == 'POST':
+        category.is_active = False
+        category.save()
+        return HttpResponseRedirect(reverse('admin_staff:categories'))
+
+    context = {'title': title, 'category_to_delete': category}
+
+    return render(request, 'categories_delete.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def products(request, pk):
     title = 'админка/продукт'
 
@@ -111,17 +158,70 @@ def products(request, pk):
     return render(request, 'admin_products.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def product_create(request, pk):
-    pass
+    title = 'продукт/создание'
+    category = get_object_or_404(ProductCategory, pk=pk)
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('admin_staff:products', args=[pk]))
+    else:
+        form = ProductForm()
+
+    context = {
+        'title': title,
+        'form': form,
+        'category': category,
+    }
+
+    return render(request, 'admin_products_update.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def product_read(request, pk):
-    pass
+    title = 'продукт/подробнее'
+    product = get_object_or_404(Product, pk=pk)
+    context = {'title': title, 'object': product, }
+
+    return render(request, 'admin_product_page.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def product_update(request, pk):
-    pass
+    title = 'продукт/редактирование'
+
+    edit_product = get_object_or_404(Product, id=pk)
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=edit_product)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('admin_staff:product_update', args=[edit_product.pk]))
+    else:
+        form = ProductForm(instance=edit_product)
+
+    context = {
+        'title': title,
+        'form': form,
+        'category': edit_product.category,
+    }
+
+    return render(request, 'admin_products_update.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def product_delete(request, pk):
-    pass
+    title = 'продукт/удаление'
+
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == 'POST':
+        product.is_active = False
+        product.save()
+        return HttpResponseRedirect(reverse('admin_staff:products', args=[product.category.pk]))
+
+    context = {'title': title, 'product_to_delete': product}
+
+    return render(request, 'admin_product_delete.html', context)
