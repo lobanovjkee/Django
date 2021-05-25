@@ -11,8 +11,9 @@
     <tbody>
     {% for item in basket %}
         <tr>
-            <th scope="row">{{ forloop.counter }}</th>
-            <td class="hover_img">{{ item.product.name }} <span><img src="/media/{{ item.product.image }}"></span></td>
+            <th scope="row" class="hover_img">{{ forloop.counter }} <span><img
+                    src="/media/{{ item.product.image }}"></span></th>
+            <td>{{ item.product.name }} </td>
             <td><input class="p-2 w-25" type="number" name="{{ item.pk }}" min="0"
                        value="{{ item.quantity }}"></td>
             <th><a style="text-decoration: none; color: black;"
