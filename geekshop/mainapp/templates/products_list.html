@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
-
+{% load myfilters %}
 {% block header %}
     <div class="container">
         <div class="hero-white">
@@ -18,17 +18,17 @@
         <div class="row my-5">
             <div class="col-6">
                 <div class="slider-product">
-                    <img src="/media/{{ hot_product.image }}" class="w-100">
+                    <img src="{{ hot_product.image|media_folder_products}}" class="w-100">
                 </div>
                 <div class="slider-control ml-2 my-3">
                     <div class="block">
-                        <a href="#"><img style="max-width: 50px" src="/media/{{ hot_product.image }}" alt=""></a>
+                        <a href="#"><img style="max-width: 50px" src="{{ hot_product.image|media_folder_products}}" alt=""></a>
                     </div>
                     <div class="block">
-                        <a href="#"><img style="max-width: 50px" src="/media/{{ hot_product.image }}" alt=""></a>
+                        <a href="#"><img style="max-width: 50px" src="{{ hot_product.image|media_folder_products}}" alt=""></a>
                     </div>
                     <div class="block">
-                        <a href="#"><img style="max-width: 50px" src="/media/{{ hot_product.image }}" alt=""></a>
+                        <a href="#"><img style="max-width: 50px" src="{{ hot_product.image|media_folder_products}}" alt=""></a>
                     </div>
                 </div>
             </div>
@@ -48,27 +48,12 @@
         <h2>
             Категория: {{ category.name }}
         </h2>
-{#        <div class="paginator">#}
-{#            {% if products.has_previous %}#}
-{#                <a href="{% url 'products:page' category.pk products.previous_page_number %}">#}
-{#                    <#}
-{#                </a>#}
-{#            {% endif %}#}
-{#            <span class="current">#}
-{#                страница {{ products.number }} из {{ products.paginator.num_pages }}#}
-{#            </span>#}
-{#            {% if products.has_next %}#}
-{#                <a href="{% url 'products:page' category.pk products.next_page_number %}">#}
-{#                    >#}
-{#                </a>#}
-{#            {% endif %}#}
-{#        </div>#}
         {% include 'inc_paginator.html' %}
         <div class="category-products row">
             {% for product in products %}
                 <div class="block w-25 my-3 mx-3">
                     <a href="{% url 'products:product_page' product.pk %}">
-                        <img src="/media/{{ product.image }}" class="w-75" alt="{{ product.short_desc }}">
+                        <img src="{{ product.image|media_folder_products }}" class="w-75" alt="{{ product.short_desc }}">
                     </a>
 
                     <a href="{% url 'basket:add' product.pk %}">
