@@ -4,8 +4,7 @@ from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, UpdateView, CreateView, DeleteView
 
-from adminapp.forms import ShopUserAdminEditForm, ProductCategoryForm, ProductForm
-from authapp.forms import ShopUserRegisterForm
+from adminapp.forms import ProductCategoryForm, ProductForm
 from authapp.models import ShopUser
 from django.shortcuts import get_object_or_404, render
 from mainapp.models import Product, ProductCategory
@@ -43,7 +42,6 @@ class UsersListView(ListView):
 class CreateUserView(CreateView):
     model = ShopUser
     template_name = 'user_update.html'
-    # form_class = ShopUserAdminEditForm
     fields = ['username', 'first_name', 'last_name', 'email', 'age', 'avatar', 'is_active', 'is_staff']
     success_url = reverse_lazy('admin_staff:users')
 
@@ -54,7 +52,6 @@ class CreateUserView(CreateView):
 
     def get_success_url(self):
         return self.success_url
-
 
 
 # @user_passes_test(lambda u: u.is_superuser)
@@ -136,19 +133,32 @@ class UserDeleteView(DeleteView):
 #
 #     return render(request, 'user_delete.html', context)
 
+class ProductCategoryListView(ListView):
+    model = ProductCategory
+    template_name = 'categories.html'
+    context_object_name = 'objects'
 
-@user_passes_test(lambda u: u.is_superuser)
-def categories(request):
-    title = 'админка/категории'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'админка/категории'
+        return context
 
-    categories_list = ProductCategory.objects.all()
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
-    context = {
-        'title': title,
-        'objects': categories_list
-    }
-
-    return render(request, 'categories.html', context)
+# @user_passes_test(lambda u: u.is_superuser)
+# def categories(request):
+#     title = 'админка/категории'
+#
+#     categories_list = ProductCategory.objects.all()
+#
+#     context = {
+#         'title': title,
+#         'objects': categories_list
+#     }
+#
+#     return render(request, 'categories.html', context)
 
 
 class ProductCategoryCreateView(CreateView):
@@ -156,7 +166,7 @@ class ProductCategoryCreateView(CreateView):
     template_name = 'categories_update.html'
     form_class = ProductCategoryForm
     success_url = reverse_lazy('admin_staff:categories')
-    # @method_decorator(user_passes_test(lambda u: u.is_superuser))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'категории/создание'
@@ -164,6 +174,7 @@ class ProductCategoryCreateView(CreateView):
 
     def get_success_url(self):
         return self.success_url
+
 
 # @user_passes_test(lambda u: u.is_superuser)
 # def category_create(request):
@@ -184,23 +195,34 @@ class ProductCategoryCreateView(CreateView):
 #
 #     return render(request, 'categories_update.html', context)
 
+class ProductCategoryUpdateView(UpdateView):
+    model = ProductCategory
+    template_name = 'categories_update.html'
+    context_object_name = 'category'
+    success_url = reverse_lazy('admin_staff:categories')
+    fields = '__all__'
 
-@user_passes_test(lambda u: u.is_superuser)
-def category_update(request, pk):
-    title = 'категории/редактирование'
-
-    edit_category = get_object_or_404(ProductCategory, pk=pk)
-    if request.method == 'POST':
-        form = ProductCategoryForm(request.POST, request.FILES, instance=edit_category)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('admin_staff:category_update', args=[edit_category.pk]))
-    else:
-        form = ProductCategoryForm(instance=edit_category)
-
-    context = {'title': title, 'form': form}
-
-    return render(request, 'categories_update.html', context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'категории/редактирование'
+        return context
+#
+# @user_passes_test(lambda u: u.is_superuser)
+# def category_update(request, pk):
+#     title = 'категории/редактирование'
+#
+#     edit_category = get_object_or_404(ProductCategory, pk=pk)
+#     if request.method == 'POST':
+#         form = ProductCategoryForm(request.POST, request.FILES, instance=edit_category)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('admin_staff:category_update', args=[edit_category.pk]))
+#     else:
+#         form = ProductCategoryForm(instance=edit_category)
+#
+#     context = {'title': title, 'form': form}
+#
+#     return render(request, 'categories_update.html', context)
 
 
 class CategoryDeleteView(DeleteView):
