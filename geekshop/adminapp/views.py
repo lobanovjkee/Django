@@ -399,19 +399,13 @@ class ProductDeleteView(DeleteView):
         context['category'] = self.get_object().category
         return context
 
-    def get_success_url(self):
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.is_active = False
         self.object.save()
-        return reverse_lazy('admin_staff:products', args=[self.object['category_id']])
 
-    # @method_decorator(user_passes_test(lambda u: u.is_superuser))
-    # def post(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     self.object.is_active = False
-    #     self.object.save()
-    #
-    #     return reverse_lazy('admin_staff:products', args=[self.object['category_id']])
+        return HttpResponseRedirect(reverse_lazy('admin_staff:categories'))
 
 # @user_passes_test(lambda u: u.is_superuser)
 # def product_delete(request, pk):
