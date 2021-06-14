@@ -40,7 +40,7 @@ def products(request, pk=None, page=1):
             category = get_object_or_404(ProductCategory, pk=pk)
             products = Product.objects.filter(category__pk=pk).order_by('price')
 
-        paginator = Paginator(products, 2)
+        paginator = Paginator(products, 3)
 
         try:
             products_paginator = paginator.page(page)
@@ -52,7 +52,7 @@ def products(request, pk=None, page=1):
         hot_product = get_hot_product()
         same_products = get_same_products(hot_product)
 
-        content = {
+        context = {
             'title': 'каталог',
             'categories': categories,
             'category': category,
@@ -60,9 +60,10 @@ def products(request, pk=None, page=1):
             'basket': get_basket(request.user),
             'hot_product': hot_product,
             'same_products': same_products,
+            'paginator': paginator,
         }
 
-        return render(request, 'products_list.html', content)
+        return render(request, 'products_list.html', context)
 
 
 def product_page(request, pk=None):
@@ -83,5 +84,6 @@ def product_page(request, pk=None):
         'category': category,
         'products': products,
         'basket': get_basket(request.user),
+
     }
     return render(request, 'product_page.html', context=context)

@@ -81,12 +81,13 @@
                         </tbody>
                     </table>
 
-                    <div class="card-footer">
+                    <div class="card-footer d-flex">
                         <button class="btn btn-success">
                             <a class="text-white" href={% url 'admin_staff:product_create' category.pk %}>
                                 новый продукт
                             </a>
                         </button>
+                        {% include 'includes/inc_admin_paginator.html' %}
                     </div>
 
                 </div>

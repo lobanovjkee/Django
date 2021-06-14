@@ -72,10 +72,11 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer d-flex ">
                     <a href="{% url 'admin_staff:user_create' %}">
                         <button class="btn btn-success">Создать пользователя</button>
                     </a>
+                   {% include 'includes/inc_admin_paginator.html' %}
                 </div>
             </div>
         </div>

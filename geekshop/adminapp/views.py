@@ -14,6 +14,7 @@ class UsersListView(ListView):
     model = ShopUser
     template_name = 'users.html'
     context_object_name = 'objects'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -137,6 +138,7 @@ class ProductCategoriesListView(ListView):
     model = ProductCategory
     template_name = 'categories.html'
     context_object_name = 'objects'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -262,6 +264,7 @@ class ProductsListView(ListView):
     model = Product
     template_name = 'admin_products.html'
     context_object_name = 'objects'
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
