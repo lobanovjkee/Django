@@ -47,23 +47,23 @@
                                     <td>{{ user.email }}</td>
                                     <td class="text-center">
                                         {% if user.is_staff %}
-                                            <i class="fa fa-check-circle"></i>
+                                            <i class="fa fa-check-circle text-success"></i>
                                         {% else %}
-                                            <i class="fa fa-times-circle"></i>
+                                            <i class="fa fa-times-circle text-danger"></i>
                                         {% endif %}
                                     </td>
                                     <td class="text-center">
                                         {% if user.is_active %}
-                                            <i class="fa fa-check-circle"></i>
+                                            <i class="fa fa-check-circle text-success"></i>
                                         {% else %}
-                                            <i class="fa fa-times-circle"></i>
+                                            <i class="fa fa-times-circle text-danger"></i>
                                         {% endif %}
                                     </td>
                                     <td>{{ user.last_login }}</td>
-                                    <td>
+                                    <td class="text-center">
                                         <a {% if not user.is_active %} class="invisible" {% endif %}
                                                                        href="{% url 'admin_staff:user_delete' pk=user.id %}">
-                                            <i class="fa fa-times-circle"></i>
+                                            <i class="fa fa-times-circle text-danger"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -72,10 +72,11 @@
                         </table>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a href="{% url 'adminapp:user_create' %}">
+                <div class="card-footer d-flex ">
+                    <a href="{% url 'admin_staff:user_create' %}">
                         <button class="btn btn-success">Создать пользователя</button>
                     </a>
+                   {% include 'includes/inc_admin_paginator.html' %}
                 </div>
             </div>
         </div>

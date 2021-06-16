@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404
 
 from basketapp.models import Basket
 from .models import Product, ProductCategory
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def get_basket(user):
@@ -25,31 +26,44 @@ def get_same_products(hot_products):
     return same_products
 
 
-def products(request, pk=None):
+def products(request, pk=None, page=1):
     categories = ProductCategory.objects.all()
 
     if pk is not None:
         if pk == 0:
             products = Product.objects.all().order_by('price')
-            category = {'name': 'все'}
+            category = {
+                'pk': 0,
+                'name': 'все',
+            }
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
             products = Product.objects.filter(category__pk=pk).order_by('price')
 
+        paginator = Paginator(products, 3)
+
+        try:
+            products_paginator = paginator.page(page)
+        except PageNotAnInteger:
+            products_paginator = paginator.page(1)
+        except EmptyPage:
+            products_paginator = paginator.page(paginator.num_pages)
+
         hot_product = get_hot_product()
         same_products = get_same_products(hot_product)
 
-        content = {
+        context = {
             'title': 'каталог',
             'categories': categories,
             'category': category,
-            'products': products,
+            'products': products_paginator,
             'basket': get_basket(request.user),
             'hot_product': hot_product,
             'same_products': same_products,
+            'paginator': paginator,
         }
 
-        return render(request, 'products_list.html', content)
+        return render(request, 'products_list.html', context)
 
 
 def product_page(request, pk=None):
@@ -70,5 +84,6 @@ def product_page(request, pk=None):
         'category': category,
         'products': products,
         'basket': get_basket(request.user),
+
     }
     return render(request, 'product_page.html', context=context)

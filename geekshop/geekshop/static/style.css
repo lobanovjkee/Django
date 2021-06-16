@@ -17,11 +17,11 @@ html, body {
     height: 384px;
 }
 
-.container {
-    width: 1366px;
-    margin: 0 auto;
-    min-height: 100%;
-}
+/*.container {*/
+/*    width: 1366px;*/
+/*    margin: 0 auto;*/
+/*    min-height: 100%;*/
+/*}*/
 
 .slider {
     height: 800px;

@@ -18,7 +18,7 @@ class ShopUserLoginForm(AuthenticationForm):
 class ShopUserRegisterForm(UserCreationForm):
     class Meta:
         model = ShopUser
-        fields = ('username', 'first_name', 'password1', 'password2', 'email', 'age', 'avatar')
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'email', 'age', 'avatar')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,6 +46,8 @@ class ShopUserEditForm(UserChangeForm):
             field.help_text = ''
             if field_name == 'password':
                 field.widget = forms.HiddenInput()
+            if field_name in ['is_staff', 'is_active', 'is_superuser']:
+                field.widget.attrs['class'] = ''
 
     def clean_age(self):
         data = self.cleaned_data['age']

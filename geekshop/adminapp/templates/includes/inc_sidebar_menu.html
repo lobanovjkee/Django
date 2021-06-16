@@ -1,5 +1,6 @@
 <div class="nav_list">
-    <a href="{% url 'admin_staff:categories' %}" class="nav_link {% if request.resolver_match.url_name == 'products' %}
+    <a href="{% url 'admin_staff:categories' %}"
+       class="nav_link {% if request.resolver_match.url_name == 'products' %}
                 active
            {% endif %}">
         <i class='bx bx-grid-alt nav_icon'></i>

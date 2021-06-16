@@ -1,12 +1,12 @@
 {% extends 'authapp/base.html' %}
 {% load static %}
-
+{% load myfilters %}
 
 {% block content %}
     <div class="col-4 mx-auto">
         <div class="row">
             <div class="user_avatar text-center">
-                <img src="/media/{{ user.avatar|default:'default_avatar.svg' }}" class="rounded-circle w-25">
+                <img src="{{ user.avatar|media_folder_users }}" class="rounded-circle w-25">
             </div>
         </div>
     <div class="row">

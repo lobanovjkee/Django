@@ -43,7 +43,7 @@
                         </tfoot>
                         <tbody>
                         {% for object in objects %}
-                            <tr>
+                            <tr {% if not object.is_active %} style="opacity: 0.5;" {% endif %}>
                                 <td><img src="/media/{{ object.image|default:'products_images/default.jpg' }}"
                                          alt="{{ object.name }}" style="width:50px;">
                                 </td>
@@ -69,7 +69,7 @@
                                         </a>
                                     </button>
                                 </td>
-                                <td>
+                                <td {% if not object.is_active %} class="invisible" {% endif %} >
                                     <button class="btn btn-danger">
                                         <a class="text-white" href={% url 'admin_staff:product_delete' object.pk %}>
                                             удалить
@@ -81,12 +81,13 @@
                         </tbody>
                     </table>
 
-                    <div class="card-footer">
+                    <div class="card-footer d-flex">
                         <button class="btn btn-success">
                             <a class="text-white" href={% url 'admin_staff:product_create' category.pk %}>
                                 новый продукт
                             </a>
                         </button>
+                        {% include 'includes/inc_admin_paginator.html' %}
                     </div>
 
                 </div>
