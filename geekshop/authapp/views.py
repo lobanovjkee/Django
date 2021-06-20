@@ -1,8 +1,11 @@
+from django.conf import settings
 from django.contrib import auth
+from django.core.mail import send_mail
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from .forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
+from .models import ShopUser
 
 
 def login(request):
@@ -42,12 +45,19 @@ def register(request):
         register_form = ShopUserRegisterForm(request.POST, request.FILES)
 
         if register_form.is_valid():
-            register_form.save()
-            return HttpResponseRedirect(reverse('auth:login'))
+            user = register_form.save()
+            send_verify_link(user)
+            context = {
+                'user': user,
+            }
+            return render(request, 'authapp/link_sent.html', context)
     else:
         register_form = ShopUserRegisterForm()
 
-    content = {'title': title, 'register_form': register_form}
+    content = {
+        'title': title,
+        'register_form': register_form,
+    }
 
     return render(request, 'authapp/register.html', content)
 
@@ -66,3 +76,22 @@ def edit(request):
     content = {'title': title, 'edit_form': edit_form}
 
     return render(request, 'authapp/edit.html', content)
+
+
+def send_verify_link(user):
+    verify_link = reverse('auth:verify', args=[user.email, user.activation_key])
+    subject = 'Account verification'
+    message = f'Activate your account via this link: {settings.DOMAIN_NAME}{verify_link}'
+    return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+
+def verify(request, email, key):
+    user = ShopUser.objects.filter(email=email).first()
+    if user and user.activation_key == key and not user.is_activation_key_expires():
+        user.is_active = True
+        user.activation_key = ''
+        user.activation_key_created = None
+        user.save()
+        auth.login(request, user)
+
+    return render(request, 'authapp/verify.html')

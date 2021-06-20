@@ -11,9 +11,9 @@ from mainapp.models import Product
 @login_required
 def basket(request):
     if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+        _basket = Basket.objects.filter(user=request.user)
         context = {
-            'basket': basket,
+            'basket': _basket,
 
         }
         return render(request, 'basket.html', context)
@@ -27,13 +27,13 @@ def basket_add(request, pk):
         return HttpResponseRedirect(reverse('products:product', args=[pk]))
     product = get_object_or_404(Product, pk=pk)
 
-    basket = Basket.objects.filter(user=request.user, product=product).first()
+    _basket = Basket.objects.filter(user=request.user, product=product).first()
 
-    if not basket:
-        basket = Basket(user=request.user, product=product)
+    if not _basket:
+        _basket = Basket(user=request.user, product=product)
 
-    basket.quantity += 1
-    basket.save()
+    _basket.quantity += 1
+    _basket.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -58,13 +58,12 @@ def basket_edit(request, pk, quantity):
         else:
             new_basket_item.delete()
 
-        basket = Basket.objects.filter(user=request.user).order_by('product__category')
+        _basket = Basket.objects.filter(user=request.user).order_by('product__category')
 
         content = {
-            'basket': basket,
+            'basket': _basket,
         }
 
         result = render_to_string('inc_table.html', content)
-        # result = render_to_string('inc_basket-content.html', content)
 
         return JsonResponse({'result': result})
