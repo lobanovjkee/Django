@@ -8,17 +8,16 @@ from authapp.models import ShopUserProfile
 
 
 def save_user_profile(backend, user, response, *args, **kwargs):
-    if backend != 'vk-oauth2':
+    if backend.name != 'vk-oauth2':
         return
 
-    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about&access_token={response['access_token']}"
-
+    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about&access_token={response['access_token']}&v=5.89"
     vk_response = requests.get(api_url)
+
     if vk_response.status_code != 200:
         return
 
     vk_data = vk_response.json()['response'][0]
-    print(vk_data)
     if vk_data['sex']:
         if vk_data['sex'] == 2:
             user.shopuserprofile.gender = ShopUserProfile.MALE
@@ -32,7 +31,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
         b_date = datetime.strptime(vk_data['bdate'], '%d.%m.%Y').date()
         age = timezone.now().date().year - b_date.year
 
-        if age < 128:
+        if age < 18:
             user.delete()
             raise AuthForbidden('social_core.backends.vk.VKOAuth2')
 
