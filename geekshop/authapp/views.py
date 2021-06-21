@@ -91,13 +91,13 @@ def send_verify_link(user):
     return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
 
-def verify(request, email, key):
+def verify(request, email, key, backend='django.contrib.auth.backends.ModelBackend'):
     user = ShopUser.objects.filter(email=email).first()
     if user and user.activation_key == key and not user.is_activation_key_expires():
         user.is_active = True
         user.activation_key = ''
         user.activation_key_created = None
         user.save()
-        auth.login(request, user)
+        auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     return render(request, 'authapp/verify.html')
