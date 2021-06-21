@@ -26,7 +26,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
             user.shopuserprofile.gender = ShopUserProfile.FEMALE
 
     if vk_data['about']:
-        user.shopuserprofile.about_me = ShopUserProfile.about_me
+        user.shopuserprofile.about_me = vk_data['about']
 
     if vk_data['bdate']:
         b_date = datetime.strptime(vk_data['bdate'], '%d.%m.%Y').date()
