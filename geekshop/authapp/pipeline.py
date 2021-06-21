@@ -29,7 +29,8 @@ def save_user_profile(backend, user, response, *args, **kwargs):
 
     if vk_data['bdate']:
         b_date = datetime.strptime(vk_data['bdate'], '%d.%m.%Y').date()
-        age = timezone.now().date().year - b_date.year
+        age = timezone.now().date().year - b_date.year - (
+                    (timezone.now().date().month, timezone.now().date().day) < (b_date.month, b_date.day))
 
         if age < 18:
             user.delete()
