@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import requests
+from django.conf import settings
 from django.utils import timezone
 from social_core.exceptions import AuthForbidden
 
@@ -11,7 +12,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
     if backend.name != 'vk-oauth2':
         return
 
-    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about&access_token={response['access_token']}&v=5.89"
+    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about,photo_max_orig&access_token={response['access_token']}&v=5.89"
     vk_response = requests.get(api_url)
 
     if vk_response.status_code != 200:
@@ -30,12 +31,18 @@ def save_user_profile(backend, user, response, *args, **kwargs):
     if vk_data['bdate']:
         b_date = datetime.strptime(vk_data['bdate'], '%d.%m.%Y').date()
         age = timezone.now().date().year - b_date.year - (
-                    (timezone.now().date().month, timezone.now().date().day) < (b_date.month, b_date.day))
+                (timezone.now().date().month, timezone.now().date().day) < (b_date.month, b_date.day))
 
         if age < 18:
             user.delete()
             raise AuthForbidden('social_core.backends.vk.VKOAuth2')
 
         user.age = age
+
+    if vk_data['photo_max_orig']:
+        photo = requests.get(vk_data['photo_max_orig']).content
+        with open(f'{settings.MEDIA_ROOT}/user_avatars/{user.username}_photo.jpg', 'wb') as f:
+            f.write(photo)
+        user.avatar = f'user_avatars/{user.username}_photo.jpg'
 
     user.save()

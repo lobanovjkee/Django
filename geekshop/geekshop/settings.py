@@ -24,12 +24,12 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-=02iin##y5bt2x%(t6ry!wh@&16b@=c9pt6h8+!5qekwv3ufmb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-#
-# ALLOWED_HOSTS = ['*']
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
+# DEBUG = False
+#
+# ALLOWED_HOSTS = ['127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
