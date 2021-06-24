@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm
+from .forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm, ShopUserProfileEditForm
 from .models import ShopUser
 
 
@@ -67,15 +67,21 @@ def edit(request):
 
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
+        profile_form = ShopUserEditForm(request.POST, instance=request.user.shopuserprofile)
+        if edit_form.is_valid() and profile_form.is_valid():
             edit_form.save()
             return HttpResponseRedirect(reverse('auth:edit'))
     else:
         edit_form = ShopUserEditForm(instance=request.user)
+        profile_form = ShopUserProfileEditForm(instance=request.user.shopuserprofile)
 
-    content = {'title': title, 'edit_form': edit_form}
+    context = {
+        'title': title,
+        'edit_form': edit_form,
+        'profile_form': profile_form,
+    }
 
-    return render(request, 'authapp/edit.html', content)
+    return render(request, 'authapp/edit.html', context)
 
 
 def send_verify_link(user):
@@ -85,13 +91,13 @@ def send_verify_link(user):
     return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
 
-def verify(request, email, key):
+def verify(request, email, key, backend='django.contrib.auth.backends.ModelBackend'):
     user = ShopUser.objects.filter(email=email).first()
     if user and user.activation_key == key and not user.is_activation_key_expires():
         user.is_active = True
         user.activation_key = ''
         user.activation_key_created = None
         user.save()
-        auth.login(request, user)
+        auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
 
     return render(request, 'authapp/verify.html')
