@@ -1,0 +1,8 @@
+{% extends 'authapp/base.html' %}
+
+
+{% block content %}
+    <h1>Активируйте аккаунт!</h1>
+    <p>Сообщение отправлено на почту {{ user.email }}</p>
+    <a href="{% url 'index' %}">На главную</a>
+{% endblock %}

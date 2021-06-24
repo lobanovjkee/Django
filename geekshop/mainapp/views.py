@@ -7,13 +7,6 @@ from .models import Product, ProductCategory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    else:
-        return []
-
-
 def get_hot_product():
     products = Product.objects.all()
 
@@ -57,7 +50,6 @@ def products(request, pk=None, page=1):
             'categories': categories,
             'category': category,
             'products': products_paginator,
-            'basket': get_basket(request.user),
             'hot_product': hot_product,
             'same_products': same_products,
             'paginator': paginator,
@@ -83,7 +75,6 @@ def product_page(request, pk=None):
         'categories': categories,
         'category': category,
         'products': products,
-        'basket': get_basket(request.user),
 
     }
     return render(request, 'product_page.html', context=context)
