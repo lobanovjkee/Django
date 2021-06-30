@@ -13,6 +13,11 @@
                     {{ user.first_name|default:'Пользователь' }}
                 </a>
             </li>
+            <li>
+                <a href="{% url 'order:list' %}">
+                    заказы
+                </a>
+            </li>
         {% endif %}
         {% if user.is_superuser %}
             <li>
