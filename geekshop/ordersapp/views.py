@@ -1,7 +1,8 @@
 from django.db import transaction
 from django.forms import inlineformset_factory
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from basketapp.models import Basket
@@ -106,4 +107,8 @@ class ReadOrder(DetailView):
 
 
 def forming_complete(request, pk):
-    pass
+    order = get_object_or_404(Order, pk=pk)
+    order.status = order.SEND_TO_PROCEED
+    order.save()
+
+    return HttpResponseRedirect(reverse('order:list'))
