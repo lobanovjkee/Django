@@ -1,4 +1,4 @@
-{% extends 'order_base.html' %}
+{% extends 'ordersapp/order_base.html' %}
 {% load static %}
 
 {% block content %}
@@ -12,6 +12,9 @@
             <th>Создан</th>
             <th>Обновлен</th>
             <th>Статус</th>
+            <th></th>
+            <th></th>
+            <th></th>
         </thead>
         <tbody>
         {% for item in object_list %}
