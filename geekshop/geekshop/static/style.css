@@ -1191,7 +1191,7 @@ td:first-child {
     display: block;
 }
 
-.hover_img span{
+.hover_img span {
     border-radius: 5px;
     visibility: hidden;
     position: absolute;
@@ -1202,7 +1202,7 @@ td:first-child {
 
 }
 
-.hover_img:hover span{
+.hover_img:hover span {
     visibility: visible;
     transition: visibility .2s ease-in;
 }
@@ -1210,4 +1210,23 @@ td:first-child {
 .hover_img img {
     max-width: 100%;
     border-radius: 5px;
+}
+
+.category_delete {
+    margin: 50px auto;
+    width: 600px;
+    font-size: 150%;
+}
+
+.category_delete .btn {
+    display: block;
+    float: left;
+    margin: 25px;
+    width: 150px;
+    color: #111;
+}
+
+.category_delete a {
+    color: #111;
+    text-decoration: none;
 }

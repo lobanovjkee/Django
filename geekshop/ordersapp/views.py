@@ -13,7 +13,7 @@ class OrderList(ListView):
     model = Order
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        return Order.objects.filter(user=self.request.user, is_active=True)
 
 
 class CreateOrder(CreateView):
@@ -97,7 +97,8 @@ class UpdateOrder(UpdateView):
 
 
 class DeleteOrder(DeleteView):
-    pass
+    model = Order
+    success_url = reverse_lazy('order:list')
 
 
 class ReadOrder(DetailView):
