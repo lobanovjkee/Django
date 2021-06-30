@@ -1230,3 +1230,69 @@ td:first-child {
     color: #111;
     text-decoration: none;
 }
+
+.basket_list input[type="number"] {
+    width: 3em;
+    position: relative;
+    display: block;
+    float: left;
+}
+
+.basket_list span.category_name {
+    margin-left: 2em;
+    width: 5em;
+    position: relative;
+    display: block;
+    float: left;
+}
+
+.basket_list span.product_name {
+    margin-left: 1em;
+    width: 8em;
+    position: relative;
+    display: block;
+    float: left;
+}
+
+.basket_list span.product_price {
+    margin-left: 1em;
+    width: 7em;
+    position: relative;
+    display: block;
+    float: left;
+}
+
+.basket_list span.product_cost {
+    margin-left: 1em;
+    width: 7em;
+    position: relative;
+    display: block;
+    float: left;
+}
+
+.basket_list .basket_record {
+    position: relative;
+    display: block;
+    height: 170px;
+    float: none;
+}
+
+.basket_record img {
+    height: 150px;
+}
+
+.basket_list .basket_record button {
+    margin-top: 50px;
+    margin-left: 390px;
+    width: 150px;
+    position: absolute;
+    display: block;
+    float: left;
+}
+
+.basket_list button {
+    margin-left: 45px;
+    width: 150px;
+    display: block;
+    float: left;
+}

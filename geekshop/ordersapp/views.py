@@ -102,7 +102,7 @@ class DeleteOrder(DeleteView):
 
 
 class ReadOrder(DetailView):
-    pass
+    model = Order
 
 
 def forming_complete(request, pk):
