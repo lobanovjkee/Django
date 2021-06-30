@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+
 from mainapp import urls
 from . import settings
 from .views import contacts, main
@@ -31,6 +32,7 @@ urlpatterns = [
     path('basket/', include('basketapp.urls', namespace='basket')),
     path('admin_staff/', include('adminapp.urls', namespace='admin_staff')),
     path('', include('social_django.urls', namespace='social')),
+    path('order/', include('ordersapp.urls', namespace='order')),
 ]
 
 if settings.DEBUG:

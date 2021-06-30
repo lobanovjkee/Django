@@ -45,7 +45,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
 
         with open(f'{settings.MEDIA_ROOT}/{user_photo_path}', 'wb') as f:
             f.write(photo)
-            
+
         user.avatar = user_photo_path
 
     user.save()
