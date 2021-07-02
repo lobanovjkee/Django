@@ -12,7 +12,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
     if backend.name != 'vk-oauth2':
         return
 
-    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about,photo_max_orig&access_token={response['access_token']}&v=5.89"
+    api_url = f"https://api.vk.com/method/users.get?fields=bdate,sex,about,photo_max_orig&access_token={response['access_token']}&v=5.131"
     vk_response = requests.get(api_url)
 
     if vk_response.status_code != 200:
@@ -41,8 +41,11 @@ def save_user_profile(backend, user, response, *args, **kwargs):
 
     if vk_data['photo_max_orig']:
         photo = requests.get(vk_data['photo_max_orig']).content
-        with open(f'{settings.MEDIA_ROOT}/user_avatars/{user.username}_photo.jpg', 'wb') as f:
+        user_photo_path = f'user_avatars/{user.username}_photo.jpg'
+
+        with open(f'{settings.MEDIA_ROOT}/{user_photo_path}', 'wb') as f:
             f.write(photo)
-        user.avatar = f'user_avatars/{user.username}_photo.jpg'
+
+        user.avatar = user_photo_path
 
     user.save()
