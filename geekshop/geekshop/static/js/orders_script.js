@@ -60,6 +60,18 @@ window.onload = function () {
         $('.order_total_quantity').html(order_total_quantity.toString());
     }
 
+    function orderSummaryRecalculate() {
+        order_total_quantity = 0;
+        order_total_cost = 0;
+
+        for (let i = 0; i < TOTAL_FORMS; i++) {
+            order_total_quantity += quantity_arr[i];
+            order_total_cost += Number((quantity_arr[i] * price_arr[i]).toFixed(2));
+        }
+        $('.order_total_cost').html(order_total_cost.toString());
+        $('.order_total_quantity').html(order_total_quantity.toString());
+    }
+
     $('.formset_row').formset({
         addText: 'добавить продукт',
         deleteText: 'удалить',
@@ -74,6 +86,37 @@ window.onload = function () {
         orderSummaryUpdate(price_arr[orderitem_num], delta_quantity);
     }
 
-    
+    $('.order_form select').change(function (event) {
+        let target = event.target;
+        let orderitem_num = parseInt(target.name.replace('orderitems-', '').replace('-product', ''));
+        let orderitem_product_pk = target.options[target.selectedIndex].value;
+
+        if (orderitem_product_pk) {
+            $.ajax({
+                url: window.location.origin + "/products/" + orderitem_product_pk + "/price",
+                success: function (data) {
+                    console.log('get product price', data.price);
+                    if (data.price) {
+                        price_arr[orderitem_num] = parseFloat(data.price);
+                        if (isNaN(quantity_arr[orderitem_num])) {
+                            quantity_arr[orderitem_num] = 0;
+                        }
+                        
+                        let priceHtml = '<span>' +
+                            data.price.toString().replace('.', ',') +
+                            '</span> руб';
+                        let currentTr = $('.order_form table').find('tr:eq(' + (orderitem_num + 1) + ')');
+
+                        currentTr.find('td:eq(2)').html(priceHtml);
+
+                        if (isNaN(currentTr.find('input[type="number"]').val())) {
+                            currentTr.find('input[type="number"]').val(0);
+                        }
+                        orderSummaryRecalculate();
+                    }
+                },
+            });
+        }
+    });
 
 }

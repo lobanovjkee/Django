@@ -1,5 +1,6 @@
 import random
 
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 from basketapp.models import Basket
@@ -78,3 +79,9 @@ def product_page(request, pk=None):
 
     }
     return render(request, 'product_page.html', context=context)
+
+
+def product_price(request, pk):
+    if request.is_ajax():
+        product = Product.objects.filter(pk=pk).first()
+        return JsonResponse({'price': product.price})
