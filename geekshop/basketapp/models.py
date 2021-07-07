@@ -14,7 +14,7 @@ class BasketQuerySet(models.QuerySet):
 
 
 class Basket(models.Model):
-    objects = BasketQuerySet.as_manager()
+    # objects = BasketQuerySet.as_manager()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='basket')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='количество', default=0)
@@ -39,14 +39,18 @@ class Basket(models.Model):
         _total_cost = sum(list(map(lambda x: x.product_cost, _items)))
         return _total_cost
 
-    def delete(self, *args, **kwargs):
-        self.product.quantity += self.quantity
-        self.product.save()
-        super().delete(*args, **kwargs)
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.get(pk=pk)
 
-    def save(self, *args, **kwargs):
-        if self.pk:
-            self.product.quantity -= self.quantity - self.__class__.objects.get(pk=self.pk).quantity
-        else:
-            self.product.quantity -= self.quantity
-        super().save(*args, **kwargs)
+    # def delete(self, *args, **kwargs):
+    #     self.product.quantity += self.quantity
+    #     self.product.save()
+    #     super().delete(*args, **kwargs)
+    #
+    # def save(self, *args, **kwargs):
+    #     if self.pk:
+    #         self.product.quantity -= self.quantity - self.__class__.objects.get(pk=self.pk).quantity
+    #     else:
+    #         self.product.quantity -= self.quantity
+    #     super().save(*args, **kwargs)
