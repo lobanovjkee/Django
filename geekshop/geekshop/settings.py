@@ -65,7 +65,7 @@ ROOT_URLCONF = 'geekshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['geekshop/templates', '../authapp/templates', '../mainapp/templates'],
+        'DIRS': ['templates/'],
         # указываем в какой еще дирректории искать шаблоны - нашу базовую дирректорию
         'APP_DIRS': True,
         'OPTIONS': {
@@ -87,11 +87,18 @@ WSGI_APPLICATION = 'geekshop.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#         'CHARSET': 'utf-8',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'CHARSET': 'utf-8',
+        'NAME': 'geekshop',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'postgres'
     }
 }
 
@@ -132,7 +139,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "geekshop", "static"),
+    os.path.join(BASE_DIR, "static"),
 )
 
 # для поиска папок со статикой внутри папок приложений

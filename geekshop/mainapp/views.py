@@ -56,7 +56,7 @@ def products(request, pk=None, page=1):
             'paginator': paginator,
         }
 
-        return render(request, 'products_list.html', context)
+        return render(request, 'mainapp/products_list.html', context)
 
 
 def product_page(request, pk=None):
@@ -78,7 +78,7 @@ def product_page(request, pk=None):
         'products': products,
 
     }
-    return render(request, 'product_page.html', context=context)
+    return render(request, 'mainapp/product_page.html', context=context)
 
 
 def product_price(request, pk):
