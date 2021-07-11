@@ -10,11 +10,11 @@ def main(request):
         'topic': 'тренды',
         'products': products,
     }
-    return render(request, 'index.html', context=context)
+    return render(request, 'geekshop/index.html', context=context)
 
 
 def contacts(request):
     context = {
         'title': 'контакты',
     }
-    return render(request, 'contact.html', context=context)
+    return render(request, 'geekshop/contact.html', context=context)

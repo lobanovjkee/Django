@@ -16,7 +16,7 @@ def basket(request):
             'basket': _basket,
 
         }
-        return render(request, 'basket.html', context)
+        return render(request, 'basketapp/basket.html', context)
 
     return HttpResponseRedirect(request.META.get("HTTP_REFERER"))
 
@@ -64,6 +64,6 @@ def basket_edit(request, pk, quantity):
             'basket': _basket,
         }
 
-        result = render_to_string('inc_table.html', content)
+        result = render_to_string('includes/inc_table.html', content)
 
         return JsonResponse({'result': result})

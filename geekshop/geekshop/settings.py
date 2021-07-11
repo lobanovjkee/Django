@@ -65,7 +65,7 @@ ROOT_URLCONF = 'geekshop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['geekshop/templates', '../authapp/templates', '../mainapp/templates'],
+        'DIRS': ['templates/'],
         # указываем в какой еще дирректории искать шаблоны - нашу базовую дирректорию
         'APP_DIRS': True,
         'OPTIONS': {
@@ -132,7 +132,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "geekshop", "static"),
+    os.path.join(BASE_DIR, "static"),
 )
 
 # для поиска папок со статикой внутри папок приложений

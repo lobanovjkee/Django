@@ -12,7 +12,7 @@ from mainapp.models import Product, ProductCategory
 
 class UsersListView(ListView):
     model = ShopUser
-    template_name = 'users.html'
+    template_name = 'adminapp/users.html'
     context_object_name = 'objects'
     paginate_by = 5
 
@@ -42,7 +42,7 @@ class UsersListView(ListView):
 
 class UserCreateView(CreateView):
     model = ShopUser
-    template_name = 'user_update.html'
+    template_name = 'adminapp/user_update.html'
     fields = ['username', 'first_name', 'last_name', 'email', 'age', 'avatar', 'is_active', 'is_staff']
     success_url = reverse_lazy('admin_staff:users')
 
@@ -74,7 +74,7 @@ class UserCreateView(CreateView):
 
 class UserUpdateView(UpdateView):
     model = ShopUser
-    template_name = 'user_update.html'
+    template_name = 'adminapp/user_update.html'
     context_object_name = 'user'
     success_url = reverse_lazy('admin_staff:users')
     # fields = '__all__'
@@ -106,7 +106,7 @@ class UserUpdateView(UpdateView):
 
 class UserDeleteView(DeleteView):
     model = ShopUser
-    template_name = 'user_delete.html'
+    template_name = 'adminapp/user_delete.html'
     context_object_name = 'user_to_delete'
     success_url = reverse_lazy('admin_staff:users')
 
@@ -136,7 +136,7 @@ class UserDeleteView(DeleteView):
 
 class ProductCategoriesListView(ListView):
     model = ProductCategory
-    template_name = 'categories.html'
+    template_name = 'adminapp/categories.html'
     context_object_name = 'objects'
     paginate_by = 5
 
@@ -166,7 +166,7 @@ class ProductCategoriesListView(ListView):
 
 class ProductCategoryCreateView(CreateView):
     model = ProductCategory
-    template_name = 'categories_update.html'
+    template_name = 'adminapp/categories_update.html'
     form_class = ProductCategoryForm
     success_url = reverse_lazy('admin_staff:categories')
 
@@ -200,7 +200,7 @@ class ProductCategoryCreateView(CreateView):
 
 class ProductCategoryUpdateView(UpdateView):
     model = ProductCategory
-    template_name = 'categories_update.html'
+    template_name = 'adminapp/categories_update.html'
     context_object_name = 'category'
     success_url = reverse_lazy('admin_staff:categories')
     fields = '__all__'
@@ -232,7 +232,7 @@ class ProductCategoryUpdateView(UpdateView):
 
 class ProductCategoryDeleteView(DeleteView):
     model = ProductCategory
-    template_name = 'categories_delete.html'
+    template_name = 'adminapp/categories_delete.html'
     context_object_name = 'category_to_delete'
     success_url = reverse_lazy('admin_staff:categories')
 
@@ -262,7 +262,7 @@ class ProductCategoryDeleteView(DeleteView):
 
 class ProductsListView(ListView):
     model = Product
-    template_name = 'admin_products.html'
+    template_name = 'adminapp/admin_products.html'
     context_object_name = 'objects'
     paginate_by = 5
 
@@ -301,7 +301,7 @@ class ProductsListView(ListView):
 
 class ProductCreateView(CreateView):
     model = Product
-    template_name = 'admin_products_update.html'
+    template_name = 'adminapp/admin_products_update.html'
     form_class = ProductForm
 
     def get_context_data(self, **kwargs):
@@ -337,7 +337,7 @@ class ProductCreateView(CreateView):
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'admin_product_page.html'
+    template_name = 'adminapp/admin_product_page.html'
     context_object_name = 'object'
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
@@ -356,7 +356,7 @@ class ProductDetailView(DetailView):
 
 class ProductUpdateView(UpdateView):
     model = Product
-    template_name = 'admin_products_update.html'
+    template_name = 'adminapp/admin_products_update.html'
     form_class = ProductForm
 
     def get_context_data(self, **kwargs):
@@ -393,7 +393,7 @@ class ProductUpdateView(UpdateView):
 
 class ProductDeleteView(DeleteView):
     model = Product
-    template_name = 'admin_product_delete.html'
+    template_name = 'adminapp/admin_product_delete.html'
     context_object_name = 'product_to_delete'
 
     def get_context_data(self, **kwargs):
