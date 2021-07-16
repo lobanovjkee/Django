@@ -11,7 +11,7 @@ from mainapp.models import Product
 @login_required
 def basket(request):
     if request.user.is_authenticated:
-        _basket = Basket.objects.filter(user=request.user)
+        _basket = Basket.objects.filter(user=request.user).select_related()
         context = {
             'basket': _basket,
 
@@ -58,7 +58,7 @@ def basket_edit(request, pk, quantity):
         else:
             new_basket_item.delete()
 
-        _basket = Basket.objects.filter(user=request.user).order_by('product__category')
+        _basket = Basket.objects.filter(user=request.user).order_by('product__category').select_related()
 
         content = {
             'basket': _basket,

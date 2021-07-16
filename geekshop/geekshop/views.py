@@ -4,7 +4,8 @@ from mainapp.models import Product
 
 
 def main(request):
-    products = Product.objects.all()[:4]
+    products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')[:3]
+
     context = {
         "title": 'магазин',
         'topic': 'тренды',
