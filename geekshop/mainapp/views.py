@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def get_hot_product():
-    products = Product.objects.all()
+    products = Product.objects.all().select_related()
 
     return random.sample(list(products), 1)[0]
 
@@ -21,18 +21,18 @@ def get_same_products(hot_products):
 
 
 def products(request, pk=None, page=1):
-    categories = ProductCategory.objects.all()
+    categories = ProductCategory.objects.all().select_related()
 
     if pk is not None:
         if pk == 0:
-            products = Product.objects.all().order_by('price')
+            products = Product.objects.all().order_by('price').select_related()
             category = {
                 'pk': 0,
                 'name': 'все',
             }
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
-            products = Product.objects.filter(category__pk=pk).order_by('price')
+            products = Product.objects.filter(category__pk=pk).order_by('price').select_related()
 
         paginator = Paginator(products, 3)
 
@@ -64,11 +64,11 @@ def product_page(request, pk=None):
 
     if pk is not None:
         if pk == 0:
-            products = Product.objects.all().order_by('price')
+            products = Product.objects.all().order_by('price').select_related()
             category = {'name': 'все'}
         else:
             category = get_object_or_404(ProductCategory, pk=pk)
-            products = Product.objects.filter(category__pk=pk).order_by('price')
+            products = Product.objects.filter(category__pk=pk).order_by('price').select_related()
     product = get_object_or_404(Product, pk=pk)
     context = {
         'title': product.name,

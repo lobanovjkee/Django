@@ -82,7 +82,9 @@ class UpdateOrder(UpdateView):
         data = super().get_context_data(**kwargs)
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemEditForm, extra=1)
         if self.request.POST:
-            formset = OrderFormSet(self.request.POST, instance=self.object)
+            # formset = OrderFormSet(self.request.POST, instance=self.object)
+            queryset = self.object.orderitems.select_related()
+            formset = OrderFormSet(instance=self.object, queryset=queryset)
         else:
             order_item_formset = OrderFormSet(instance=self.object)
             for form in order_item_formset.forms:

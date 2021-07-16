@@ -67,7 +67,7 @@ def register(request):
     return render(request, 'authapp/register.html', content)
 
 
-@method_decorator(login_required())
+@login_required()
 def edit(request):
     title = 'редактирование'
 
