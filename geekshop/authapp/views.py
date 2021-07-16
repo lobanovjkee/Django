@@ -1,13 +1,18 @@
 from django.conf import settings
 from django.contrib import auth
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.shortcuts import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import ShopUserLoginForm, ShopUserRegisterForm, ShopUserEditForm, ShopUserProfileEditForm
 from .models import ShopUser
 
 
+@csrf_exempt
 def login(request):
     title = 'вход'
 
@@ -62,6 +67,7 @@ def register(request):
     return render(request, 'authapp/register.html', content)
 
 
+@method_decorator(login_required())
 def edit(request):
     title = 'редактирование'
 
