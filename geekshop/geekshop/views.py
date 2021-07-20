@@ -1,11 +1,12 @@
 from django.shortcuts import render
 
 from mainapp.models import Product
+from mainapp.views import get_products
 
 
 def main(request):
-    products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')[:3]
-
+    # products = Product.objects.filter(is_active=True, category__is_active=True).select_related('category')[:3]
+    products = get_products()[:3]
     context = {
         "title": 'магазин',
         'topic': 'тренды',
