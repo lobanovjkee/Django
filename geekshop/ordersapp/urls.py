@@ -1,3 +1,5 @@
+from django.views.decorators.cache import cache_page
+
 import ordersapp.views as ordersapp
 from django.urls import path
 
@@ -8,6 +10,6 @@ urlpatterns = [
     path('create/', ordersapp.CreateOrder.as_view(), name='create'),
     path('update/<pk>/', ordersapp.UpdateOrder.as_view(), name='update'),
     path('delete/<pk>/', ordersapp.DeleteOrder.as_view(), name='delete'),
-    path('read/<pk>/', ordersapp.ReadOrder.as_view(), name='read'),
+    path('read/<pk>/', cache_page(3600)(ordersapp.ReadOrder.as_view()), name='read'),
     path('forming/complete/<pk>', ordersapp.forming_complete, name='forming_complete'),
 ]

@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from basketapp.models import Basket
@@ -107,7 +106,7 @@ class UpdateOrder(UpdateView):
                 orderitems.instance = self.object
                 orderitems.save()
 
-        if self.object.get_total_cost() == 0:
+        if self.object.get_summary()['total_cost'] == 0:
             self.object.delete()
 
         return super().form_valid(form)
@@ -118,7 +117,6 @@ class DeleteOrder(DeleteView):
     success_url = reverse_lazy('order:list')
 
 
-@cache_page(3600)
 class ReadOrder(DetailView):
     model = Order
 
