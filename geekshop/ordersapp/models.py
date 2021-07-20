@@ -30,15 +30,22 @@ class Order(models.Model):
 
     status = models.CharField(choices=STATUSES, default=FORMING, verbose_name='статус', max_length=256)
 
-    def get_total_quantity(self):
+    def get_summary(self):
         _items = self.orderitems.select_related()
-        _total_quantity = sum(list(map(lambda x: x.quantity, _items)))
-        return _total_quantity
+        return {
+            'total_cost': sum(list(map(lambda x: x.quantity * x.product.price, _items))),
+            'total_quantity': sum(list(map(lambda x: x.quantity, _items)))
+        }
 
-    def get_total_cost(self):
-        _items = self.orderitems.select_related()
-        _total_cost = sum(list(map(lambda x: x.get_product_cost(), _items)))
-        return _total_cost
+    # def get_total_quantity(self):
+    #     _items = self.orderitems.select_related()
+    #     _total_quantity = sum(list(map(lambda x: x.quantity, _items)))
+    #     return _total_quantity
+    #
+    # def get_total_cost(self):
+    #     _items = self.orderitems.select_related()
+    #     _total_cost = sum(list(map(lambda x: x.get_product_cost(), _items)))
+    #     return _total_cost
 
     def delete(self):
         for item in self.orderitems.select_related():
