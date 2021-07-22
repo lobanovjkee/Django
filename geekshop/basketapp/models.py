@@ -46,6 +46,10 @@ class Basket(models.Model):
     def get_item(pk):
         return Basket.objects.get(pk=pk)
 
+    @staticmethod
+    def get_product(user, product):
+        return Basket.objects.filter(user=user, product=product)
+
     def delete(self, *args, **kwargs):
         self.product.quantity += self.quantity
         self.product.save()
