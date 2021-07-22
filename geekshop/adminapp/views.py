@@ -1,4 +1,6 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -124,12 +126,21 @@ class ProductCategoryDeleteView(DeleteView):
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.is_active = False
-        for item in Product.objects.filter(category=self.object):
-            item.is_active = False
-            item.save()
+        # for item in Product.objects.filter(category=self.object):
+        #     item.is_active = False
+        #     item.save()
         self.object.save()
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+@receiver(pre_save, sender=ProductCategory)
+def product_is_active_update_product_category_save(sender, instance, **kwargs):
+    if instance.pk:
+        if instance.is_active:
+            instance.product_set.update(is_active=True)
+        else:
+            instance.product_set.update(is_active=False)
 
 
 class ProductsListView(ListView):
