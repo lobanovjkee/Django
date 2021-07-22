@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.db import connection
 from django.db.models import F
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -11,6 +12,12 @@ from adminapp.forms import ProductCategoryForm, ProductForm
 from authapp.models import ShopUser
 from django.shortcuts import get_object_or_404
 from mainapp.models import Product, ProductCategory
+
+
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}:')
+    [print(query['sql']) for query in update_queries]
 
 
 class UsersListView(ListView):
@@ -121,7 +128,7 @@ class ProductCategoryUpdateView(UpdateView):
             discount = form.cleaned_data['discount']
             if discount:
                 self.object.product_set.update(price=F('price') * (1 - discount / 100))
-
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
         return super().form_valid(form)
 
 
@@ -150,6 +157,8 @@ def product_is_active_update_product_category_save(sender, instance, **kwargs):
             instance.product_set.update(is_active=True)
         else:
             instance.product_set.update(is_active=False)
+
+        db_profile_by_type(sender, 'UPDATE', connection.queries)
 
 
 class ProductsListView(ListView):
