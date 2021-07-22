@@ -84,8 +84,9 @@ def get_products_in_category_ordered_by_price(pk):
 
 def get_hot_product():
     _products = get_products()
-
-    return random.sample(list(_products), 1)[0]
+    if _products:
+        return random.sample(list(_products), 1)[0]
+    return get_product(1)
 
 
 def get_same_products(hot_products):
