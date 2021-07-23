@@ -44,7 +44,7 @@ class BasketModelTest(TestCase):
             product=self.product_3,
             quantity=5
         )
-        self.assertTrue(basket.get_items_cached, BasketQuerySet(basket))
+        self.assertQuerysetEqual(basket.get_items_cached, BasketQuerySet(basket))
 
     def test_basket_model_total_quantity(self):
         Basket.objects.create(
@@ -105,7 +105,7 @@ class BasketModelTest(TestCase):
             quantity=44
         )
         for basket in Basket.objects.all():
-            self.assertTrue(
+            self.assertQuerysetEqual(
                 basket.get_product(self.user, basket.product),
                 Basket.objects.filter(user=self.user, product=basket.product)
             )
@@ -131,4 +131,3 @@ class BasketModelTest(TestCase):
         if basket.pk:
             self.assertEqual(self.product_2.quantity,
                              basket.product.quantity - basket.quantity + Basket.objects.get(pk=basket.pk).quantity)
-  
