@@ -131,3 +131,4 @@ class BasketModelTest(TestCase):
         if basket.pk:
             self.assertEqual(self.product_2.quantity,
                              basket.product.quantity - basket.quantity + Basket.objects.get(pk=basket.pk).quantity)
+  
