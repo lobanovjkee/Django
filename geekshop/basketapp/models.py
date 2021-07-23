@@ -6,7 +6,6 @@ from mainapp.models import Product
 
 
 class BasketQuerySet(models.QuerySet):
-
     def delete(self):
         for item in self:
             item.product.quantity += item.quantity
