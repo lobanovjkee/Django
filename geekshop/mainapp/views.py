@@ -5,7 +5,6 @@ from django.core.cache import cache
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
-from basketapp.models import Basket
 from .models import Product, ProductCategory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -84,10 +83,10 @@ def get_products_in_category_ordered_by_price(pk):
 
 
 def get_hot_product():
-    # _products = Product.objects.all().select_related()
     _products = get_products()
-
-    return random.sample(list(_products), 1)[0]
+    if _products:
+        return random.sample(list(_products), 1)[0]
+    return get_product(1)
 
 
 def get_same_products(hot_products):
@@ -97,21 +96,17 @@ def get_same_products(hot_products):
 
 
 def products(request, pk=None, page=1):
-    # categories = ProductCategory.objects.all().select_related()
     categories = get_links_menu()
 
     if pk is not None:
         if pk == 0:
-            # _products = Product.objects.all().order_by('price').select_related()
             _products = get_products_ordered_by_price()
             category = {
                 'pk': 0,
                 'name': 'все',
             }
         else:
-            # category = get_object_or_404(ProductCategory, pk=pk)
             category = get_category(pk)
-            # _products = Product.objects.filter(category__pk=pk).order_by('price').select_related()
             _products = get_products_in_category_ordered_by_price(pk)
 
         paginator = Paginator(_products, 3)
@@ -140,21 +135,17 @@ def products(request, pk=None, page=1):
 
 
 def product_page(request, pk=None):
-    # categories = ProductCategory.objects.all()
     categories = get_links_menu()
+    product = get_product(pk)
 
     if pk is not None:
         if pk == 0:
-            # _products = Product.objects.all().order_by('price').select_related()
             _products = get_products_ordered_by_price()
 
             category = {'name': 'все'}
         else:
-            # category = get_object_or_404(ProductCategory, pk=pk)
-            category = get_category(pk)
-            # _products = Product.objects.filter(category__pk=pk).order_by('price').select_related()
+            category = get_category(product.category.pk)
             _products = get_products_in_category_ordered_by_price(pk)
-    product = get_product(pk)
     context = {
         'title': product.name,
         'product': product,

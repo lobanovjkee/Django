@@ -6,7 +6,6 @@ from mainapp.models import Product
 
 
 class BasketQuerySet(models.QuerySet):
-
     def delete(self):
         for item in self:
             item.product.quantity += item.quantity
@@ -45,6 +44,10 @@ class Basket(models.Model):
     @staticmethod
     def get_item(pk):
         return Basket.objects.get(pk=pk)
+
+    @staticmethod
+    def get_product(user, product):
+        return Basket.objects.filter(user=user, product=product)
 
     def delete(self, *args, **kwargs):
         self.product.quantity += self.quantity
